@@ -2,6 +2,7 @@ package com.example.musicplayer
 
 import android.net.Uri
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContent
@@ -36,6 +37,11 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -63,6 +69,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathOperation
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -187,7 +194,6 @@ class MainActivity : ComponentActivity() {
                 }, label = "") {
                     Text(
                         text = playList[it].name, fontSize = 24.sp,
-                        color = Color.Black,
                         style = TextStyle(fontWeight = FontWeight.ExtraBold)
                     )
                 }
@@ -196,7 +202,7 @@ class MainActivity : ComponentActivity() {
                     (scaleIn() + fadeIn()) togetherWith (scaleOut() + fadeOut())
                 }, label = "") {
                     Text(
-                        text = playList[it].artist, fontSize = 12.sp, color = Color.Black,
+                        text = playList[it].artist, fontSize = 12.sp,
                         style = TextStyle(fontWeight = FontWeight.Bold)
                     )
                 }
@@ -249,7 +255,6 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(8.dp),
-                            color = Color.Black,
                             style = TextStyle(fontWeight = FontWeight.Bold)
                         )
 
@@ -258,7 +263,6 @@ class MainActivity : ComponentActivity() {
                             text = if (remainTime >= 0) remainTime.convertToText() else "",
                             modifier = Modifier
                                 .padding(8.dp),
-                            color = Color.Black,
                             style = TextStyle(fontWeight = FontWeight.Bold)
                         )
                     }
@@ -268,12 +272,12 @@ class MainActivity : ComponentActivity() {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    ControlButton(icon = R.drawable.ic_previous, size = 40.dp, onClick = {
+                    ControlButton(icon = Icons.Default.SkipPrevious, size = 40.dp, onClick = {
                         player.seekToPreviousMediaItem()
                     })
                     Spacer(modifier = Modifier.width(20.dp))
                     ControlButton(
-                        icon = if (isPlaying.value) R.drawable.ic_pause else R.drawable.ic_play,
+                        icon = if (isPlaying.value) Icons.Default.Pause else Icons.Default.PlayArrow,
                         size = 100.dp,
                         onClick = {
                             if (isPlaying.value) {
@@ -284,7 +288,7 @@ class MainActivity : ComponentActivity() {
                             isPlaying.value = player.isPlaying
                         })
                     Spacer(modifier = Modifier.width(20.dp))
-                    ControlButton(icon = R.drawable.ic_next, size = 40.dp, onClick = {
+                    ControlButton(icon = Icons.Default.SkipNext, size = 40.dp, onClick = {
                         player.seekToNextMediaItem()
                     })
                 }
@@ -313,11 +317,6 @@ class MainActivity : ComponentActivity() {
 
                 },
                 valueRange = 0f..songDuration,
-                colors = SliderDefaults.colors(
-                    thumbColor = Color.Black,
-                    activeTrackColor = Color.DarkGray,
-                    inactiveTrackColor = Color.Gray,
-                )
             )
         }
 
@@ -325,7 +324,7 @@ class MainActivity : ComponentActivity() {
      * Player control button
      */
     @Composable
-    fun ControlButton(icon: Int, size: Dp, onClick: () -> Unit) {
+    fun ControlButton(icon: ImageVector, size: Dp, onClick: () -> Unit) {
         Box(
             modifier = Modifier
                 .size(size)
@@ -336,8 +335,7 @@ class MainActivity : ComponentActivity() {
         ) {
             Icon(
                 modifier = Modifier.size(size / 1.5f),
-                painter = painterResource(id = icon),
-                tint = Color.Black,
+                imageVector = icon,
                 contentDescription = null
             )
         }
